@@ -88,5 +88,4 @@ struct CardView: View {
 
 #Preview {
     EmojiMemoryGameView(viewModel: EmojiMemoryGame())
-        .preferredColorScheme(.dark)
 }
