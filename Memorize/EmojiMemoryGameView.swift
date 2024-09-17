@@ -24,17 +24,39 @@ struct EmojiMemoryGameView: View {
     }
 
     var cards: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 85), spacing: 0)]) {
-            ForEach(viewModel.cards) { card in
-                CardView(card)
-                    .aspectRatio(2/3, contentMode: .fit)
-                    .padding(4)
-                    .onTapGesture {
-                        viewModel.choose(card)
-                    }
+        GeometryReader { geo in
+            let gridItemSize = gridItemWidthThatFits(
+                count: viewModel.cards.count,
+                size: geo.size,
+                atAspectRation: 2/3
+            )
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: gridItemSize), spacing: 0)], spacing: 0) {
+                ForEach(viewModel.cards) { card in
+                    CardView(card)
+                        .aspectRatio(2/3, contentMode: .fit)
+                        .padding(4)
+                        .onTapGesture {
+                            viewModel.choose(card)
+                        }
+                }
             }
         }
         .foregroundStyle(.orange)
+    }
+
+    func gridItemWidthThatFits(
+        count: Int,
+        size: CGSize,
+        atAspectRation aspectRation: CGFloat
+    ) -> CGFloat {
+        var columnCount = 1
+        repeat {
+
+        } while columnCount < count
+
+
+
+        return 65
     }
 
     //    var cardCountAdjusters: some View {
