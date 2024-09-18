@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct CardView: View {
-    let card: MemoryGame<String>.Card
+    typealias Card = MemoryGame<String>.Card
+
+    let card: Card
 
     init(_ card: MemoryGame<String>.Card) {
         self.card = card
