@@ -10,7 +10,13 @@ import SwiftUI
 struct AspectVGrid<Item: Identifiable, ItemView: View>: View {
     var items: [Item]
     var aspectRatio: CGFloat = 1
-    var content: (Item) -> ItemView
+    @ViewBuilder var content: (Item) -> ItemView
+
+    init(_ items: [Item], aspectRatio: CGFloat, content: @escaping (Item) -> ItemView) {
+        self.items = items
+        self.aspectRatio = aspectRatio
+        self.content = content
+    }
 
     var body: some View {
         GeometryReader { geo in
