@@ -17,27 +17,19 @@ struct CardView: View {
     }
 
     var body: some View {
-        ZStack {
-            let base = RoundedRectangle(cornerRadius: Constants.cornerRadius)
-            Group {
-                base.fill(.white)
-                base.strokeBorder(lineWidth: Constants.linewidth)
-                Circle()
-                    .opacity(Constants.Pie.opacity)
-                    .overlay(
-                        Text(card.content)
-                            .font(.system(size: Constants.FontSize.largest))
-                            .minimumScaleFactor(Constants.FontSize.scaleFactor)
-                            .multilineTextAlignment(.center)
-                            .aspectRatio(1, contentMode: .fit)
-                            .padding(Constants.Pie.inset)
-                    )
-                    .padding(Constants.inset)
-            }
-            .opacity(card.isFaceUp ? 1 : 0)
-            base.fill().opacity(card.isFaceUp ? 0 : 1)
-        }
-        .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
+        Pie(endAngle: .degrees(200))
+            .opacity(Constants.Pie.opacity)
+            .overlay(
+                Text(card.content)
+                    .font(.system(size: Constants.FontSize.largest))
+                    .minimumScaleFactor(Constants.FontSize.scaleFactor)
+                    .multilineTextAlignment(.center)
+                    .aspectRatio(1, contentMode: .fit)
+                    .padding(Constants.Pie.inset)
+            )
+            .padding(Constants.inset)
+            .modifier(Cardify(isFaceUp: card.isFaceUp))
+            .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
     }
 
     private struct Constants {
@@ -56,18 +48,18 @@ struct CardView: View {
     }
 }
 
-#Preview {
-    VStack {
-        HStack {
-            CardView(MemoryGame<String>.Card(isFaceUp: true, content: "X", id: "test1"))
-                .aspectRatio(4/3 ,contentMode: .fit)
-            CardView(MemoryGame<String>.Card(content: "X", id: "test1"))
-        }
-        HStack {
-            CardView(MemoryGame<String>.Card(isFaceUp: true, content: "This is a very long string and i hope home it fits", id: "test1"))
-            CardView(MemoryGame<String>.Card(isFaceUp: true, content: "X", id: "test1"))
-        }
-    }
-        .padding()
-        .foregroundStyle(.orange)
-}
+                #Preview {
+                    VStack {
+                        HStack {
+                            CardView(MemoryGame<String>.Card(isFaceUp: true, content: "X", id: "test1"))
+                                .aspectRatio(4/3 ,contentMode: .fit)
+                            CardView(MemoryGame<String>.Card(content: "X", id: "test1"))
+                        }
+                        HStack {
+                            CardView(MemoryGame<String>.Card(isFaceUp: true, content: "This is a very long string and i hope home it fits", id: "test1"))
+                            CardView(MemoryGame<String>.Card(isFaceUp: true, content: "X", id: "test1"))
+                        }
+                    }
+                    .padding()
+                    .foregroundStyle(.orange)
+                }
