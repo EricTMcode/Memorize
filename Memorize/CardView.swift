@@ -28,7 +28,7 @@ struct CardView: View {
                     .padding(Constants.Pie.inset)
             )
             .padding(Constants.inset)
-            .modifier(Cardify(isFaceUp: card.isFaceUp))
+            .cardify(isFaceUp: card.isFaceUp)
             .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
     }
 
@@ -48,18 +48,18 @@ struct CardView: View {
     }
 }
 
-                #Preview {
-                    VStack {
-                        HStack {
-                            CardView(MemoryGame<String>.Card(isFaceUp: true, content: "X", id: "test1"))
-                                .aspectRatio(4/3 ,contentMode: .fit)
-                            CardView(MemoryGame<String>.Card(content: "X", id: "test1"))
-                        }
-                        HStack {
-                            CardView(MemoryGame<String>.Card(isFaceUp: true, content: "This is a very long string and i hope home it fits", id: "test1"))
-                            CardView(MemoryGame<String>.Card(isFaceUp: true, content: "X", id: "test1"))
-                        }
-                    }
-                    .padding()
-                    .foregroundStyle(.orange)
-                }
+#Preview {
+    VStack {
+        HStack {
+            CardView(MemoryGame<String>.Card(isFaceUp: true, content: "X", id: "test1"))
+                .aspectRatio(4/3 ,contentMode: .fit)
+            CardView(MemoryGame<String>.Card(content: "X", id: "test1"))
+        }
+        HStack {
+            CardView(MemoryGame<String>.Card(isFaceUp: true, content: "This is a very long string and i hope home it fits", id: "test1"))
+            CardView(MemoryGame<String>.Card(isFaceUp: true, content: "X", id: "test1"))
+        }
+    }
+    .padding()
+    .foregroundStyle(.orange)
+}
