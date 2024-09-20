@@ -22,7 +22,6 @@ struct EmojiMemoryGameView: View {
                 score
                 Spacer()
                 shuffle
-
             }
             .font(.largeTitle)
         }
