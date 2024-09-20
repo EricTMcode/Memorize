@@ -47,14 +47,19 @@ struct EmojiMemoryGameView: View {
             CardView(card)
                 .padding(spacing)
                 .overlay(FlyingNumber(number: scoreChange(causedBy: card)))
+                .zIndex(scoreChange(causedBy: card) != 0 ? 1 : 0)
                 .onTapGesture {
-                    withAnimation {
-                        let scoreBeforeChosing = viewModel.score
-                        viewModel.choose(card)
-                        let scoreChange = viewModel.score - scoreBeforeChosing
-                        lastScoreChange = (scoreChange, causedByCardId: card.id)
-                    }
+                    choose(card)
                 }
+        }
+    }
+
+    private func choose(_ card: Card) {
+        withAnimation {
+            let scoreBeforeChosing = viewModel.score
+            viewModel.choose(card)
+            let scoreChange = viewModel.score - scoreBeforeChosing
+            lastScoreChange = (scoreChange, causedByCardId: card.id)
         }
     }
 
