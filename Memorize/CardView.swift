@@ -17,7 +17,8 @@ struct CardView: View {
     }
 
     var body: some View {
-        Pie(endAngle: .degrees(200))
+        TimelineView(.animation) { timeline in
+        Pie(endAngle: .degrees(card.bonusPercentRemaining * 360))
             .opacity(Constants.Pie.opacity)
             .overlay(
                 Text(card.content)
@@ -32,6 +33,7 @@ struct CardView: View {
             .padding(Constants.inset)
             .cardify(isFaceUp: card.isFaceUp)
             .opacity(card.isFaceUp || !card.isMatched ? 1 : 0)
+        }
     }
 
     private struct Constants {
