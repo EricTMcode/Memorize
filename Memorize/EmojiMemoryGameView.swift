@@ -13,15 +13,17 @@ struct EmojiMemoryGameView: View {
 
     private let aspectRatio: CGFloat = 2/3
     private let spacing: CGFloat = 4
+    private let dealAnimation: Animation = .easeInOut(duration: 1)
+    private let dealInterval: TimeInterval = 0.15
+    private let deckWidth: CGFloat = 50
 
     var body: some View {
         VStack {
-            cards
-                .foregroundStyle(viewModel.color)
+            cards.foregroundStyle(viewModel.color)
             HStack {
                 score
                 Spacer()
-                deck
+                deck.foregroundStyle(viewModel.color)
                 Spacer()
                 shuffle
             }
@@ -48,6 +50,7 @@ struct EmojiMemoryGameView: View {
             if isDealt(card) {
                 CardView(card)
                     .matchedGeometryEffect(id: card.id, in: dealingNameSpace)
+                    .transition(.asymmetric(insertion: .identity, removal: .identity))
                     .padding(spacing)
                     .overlay(FlyingNumber(number: scoreChange(causedBy: card)))
                     .zIndex(scoreChange(causedBy: card) != 0 ? 1 : 0)
@@ -75,19 +78,24 @@ struct EmojiMemoryGameView: View {
             ForEach(undealtCards) { card in
                 CardView(card)
                     .matchedGeometryEffect(id: card.id, in: dealingNameSpace)
+                    .transition(.asymmetric(insertion: .identity, removal: .identity))
             }
         }
         .frame(width: deckWidth, height: deckWidth / aspectRatio)
         .onTapGesture {
-            withAnimation(.easeInOut(duration: 2)) {
-                for card in viewModel.cards {
-                    dealt.insert(card.id)
-                }
-            }
+            deal()
         }
     }
 
-    private let deckWidth: CGFloat = 50
+    private func deal() {
+        var delay: TimeInterval = 0
+        for card in viewModel.cards {
+            withAnimation(dealAnimation.delay(delay)) {
+                _ = dealt.insert(card.id)
+            }
+            delay += dealInterval
+        }
+    }
 
     private func choose(_ card: Card) {
         withAnimation {
