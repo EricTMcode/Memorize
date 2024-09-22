@@ -21,6 +21,8 @@ struct EmojiMemoryGameView: View {
             HStack {
                 score
                 Spacer()
+                deck
+                Spacer()
                 shuffle
             }
             .font(.largeTitle)
@@ -45,23 +47,13 @@ struct EmojiMemoryGameView: View {
         AspectVGrid(viewModel.cards, aspectRatio: aspectRatio) { card in
             if isDealt(card) {
                 CardView(card)
+                    .matchedGeometryEffect(id: card.id, in: dealingNameSpace)
                     .padding(spacing)
                     .overlay(FlyingNumber(number: scoreChange(causedBy: card)))
                     .zIndex(scoreChange(causedBy: card) != 0 ? 1 : 0)
                     .onTapGesture {
                         choose(card)
                     }
-                    .transition(.offset(
-                        x: CGFloat.random(in: -1000...1000),
-                        y: CGFloat.random(in: -1000...1000)
-                    ))
-            }
-        }
-        .onAppear {
-            withAnimation(.easeInOut(duration: 2)) {
-                for card in viewModel.cards {
-                    dealt.insert(card.id)
-                }
             }
         }
     }
@@ -75,6 +67,27 @@ struct EmojiMemoryGameView: View {
     private var undealtCards: [Card] {
         viewModel.cards.filter { !isDealt($0) }
     }
+
+    @Namespace private var dealingNameSpace
+
+    private var deck: some View {
+        ZStack {
+            ForEach(undealtCards) { card in
+                CardView(card)
+                    .matchedGeometryEffect(id: card.id, in: dealingNameSpace)
+            }
+        }
+        .frame(width: deckWidth, height: deckWidth / aspectRatio)
+        .onTapGesture {
+            withAnimation(.easeInOut(duration: 2)) {
+                for card in viewModel.cards {
+                    dealt.insert(card.id)
+                }
+            }
+        }
+    }
+
+    private let deckWidth: CGFloat = 50
 
     private func choose(_ card: Card) {
         withAnimation {
