@@ -43,14 +43,29 @@ struct EmojiMemoryGameView: View {
 
     private var cards: some View {
         AspectVGrid(viewModel.cards, aspectRatio: aspectRatio) { card in
-            CardView(card)
-                .padding(spacing)
-                .overlay(FlyingNumber(number: scoreChange(causedBy: card)))
-                .zIndex(scoreChange(causedBy: card) != 0 ? 1 : 0)
-                .onTapGesture {
-                    choose(card)
-                }
+            if isDealt(card) {
+                CardView(card)
+                    .padding(spacing)
+                    .overlay(FlyingNumber(number: scoreChange(causedBy: card)))
+                    .zIndex(scoreChange(causedBy: card) != 0 ? 1 : 0)
+                    .onTapGesture {
+                        choose(card)
+                    }
+            }
         }
+        .onAppear {
+            
+        }
+    }
+
+    @State private var dealt = Set<Card.ID>()
+
+    private func isDealt(_ card: Card) -> Bool {
+        dealt.contains(card.id)
+    }
+
+    private var undealtCards: [Card] {
+        viewModel.cards.filter { !isDealt($0) }
     }
 
     private func choose(_ card: Card) {
